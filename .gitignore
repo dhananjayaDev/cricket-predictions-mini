@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+.env
+
+# Streamlit
+.streamlit/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# User Images (Optional - keeping them out of repo if they are large or personal)
+# But user might want simp1.jpeg in repo if it's the main asset. 
+# Keeping it enabled for now, but ignoring others if needed.
