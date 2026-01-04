@@ -48,180 +48,158 @@ ACCENT_COLOR_3 = "#00FFFF" # Cyan
 
 st.markdown(f"""
 <style>
-    /* Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    /* Import modern font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
-    /* Global Typography & Reset */
+    /* Global Typography */
     html, body, [class*="css"] {{
-        font-family: 'Roboto Mono', monospace;
-        color: #fff;
+        font-family: 'Inter', sans-serif;
+        color: #ffffff;
     }}
 
-    /* Main App Background */
+    /* Background Image */
     .stApp {{
-        background-color: #111111;
-        background-image: url('{BG_MAIN}'); 
-        background-size: cover; 
+        background-color: #000000;
+        background-image: url('{BG_MAIN}');
+        background-size: cover;
+        background-position: center;
         background-attachment: fixed;
     }}
+    
+    /* Overlay for better readability if image is bright */
+    .stApp::before {{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: -1;
+    }}
 
-    /* Streamlit widgets have labels that need high contrast */
-    .stSelectbox label, .stNumberInput label, .stTextInput label, .stRadio label {{
+    /* GLASSMORPHISM CARD STYLE */
+    .stMarkdown, .stButton, .stDataEditor, .stTextInput, .stNumberInput, .stSelectbox, .feature-box {{
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 10px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+    }}
+
+    /* Remove default Streamlit shadows/borders on specific inputs to blend in */
+    .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {{
+        background-color: rgba(0, 0, 0, 0.6) !important;
         color: #fff !important;
-        font-weight: 800 !important;
-        text-transform: uppercase;
-        background: #000;
-        padding: 2px 8px;
-        border: 2px solid #fff;
-        display: inline-block;
-        margin-bottom: 5px;
-        transform: rotate(-1deg);
-        box-shadow: 3px 3px 0px {ACCENT_COLOR_1};
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
     }}
     
-    /* Radio options */
-    .stRadio div[role="radiogroup"] > label {{
-        background: rgba(0,0,0,0.8) !important;
-        color: #fff !important;
-        border: 1px solid {ACCENT_COLOR_3};
-        padding: 10px;
-        margin-bottom: 5px;
+    /* Input Focus */
+    .stTextInput input:focus, .stNumberInput input:focus, .stSelectbox div[data-baseweb="select"]:focus-within {{
+        border-color: {ACCENT_COLOR_1} !important;
+        box-shadow: 0 0 10px {ACCENT_COLOR_1}40;
     }}
 
-    /* Container Styling: Neo-Brutalist Cards */
-    .stMarkdown, .stButton, .stDataEditor, .stTextInput, .stNumberInput, .stSelectbox {{
-        margin-bottom: 1.5rem;
+    /* Labels */
+    .stSelectbox label, .stNumberInput label, .stTextInput label, .stRadio label {{
+        color: #ddd !important;
+        font-weight: 600;
+        font-size: 0.9rem;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: none !important;
     }}
 
     /* Headings */
     h1, h2, h3 {{
+        color: #fff !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         font-weight: 800;
-        text-transform: uppercase;
-        color: #fff !important;
-        text-shadow: 4px 4px 0px {ACCENT_COLOR_1};
-        letter-spacing: -1px;
-        background-color: #000;
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        transform: rotate(-1deg);
-        border: 3px solid #fff;
-    }}
-
-    /* Sidebar Styling */
-    section[data-testid="stSidebar"] {{
-        background-color: {BG_SIDEBAR};
-        border-right: 5px solid #000;
-    }}
-    
-    section[data-testid="stSidebar"] h1 {{
-        color: #000 !important;
-        background-color: {ACCENT_COLOR_3};
-        text-shadow: 3px 3px 0px #000;
-        border: 3px solid #000;
-    }}
-    
-    /* Sidebar text fix */
-    section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p, 
-    section[data-testid="stSidebar"] label {{
-        color: #000 !important; 
         background: transparent !important;
-        box-shadow: none !important;
         border: none !important;
-        font-weight: 700;
-    }}
-
-    /* Input Fields */
-    .stTextInput input, .stNumberInput input, .stSelectbox div[data-baseweb="select"] {{
-        background-color: #fff;
-        border: 4px solid #000 !important;
-        border-radius: 0px !important;
-        box-shadow: 6px 6px 0px #000;
-        color: #000 !important;
-        font-weight: 700;
-        transition: all 0.1s ease;
+        transform: none !important;
+        padding: 0 !important;
     }}
     
-    .stTextInput input:focus, .stNumberInput input:focus, .stSelectbox div[data-baseweb="select"]:focus-within {{
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0px #000;
-        border-color: {ACCENT_COLOR_1} !important;
+    h1 span {{
+        background: -webkit-linear-gradient(45deg, {ACCENT_COLOR_1}, {ACCENT_COLOR_2});
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }}
 
-    /* Buttons (Primary & Secondary) */
+    /* Buttons */
     .stButton button {{
-        background-color: {ACCENT_COLOR_2} !important;
-        color: #000 !important;
-        border: 4px solid #000 !important;
-        border-radius: 0px !important;
-        box-shadow: 8px 8px 0px #000 !important;
-        font-weight: 900 !important;
-        text-transform: uppercase;
-        font-size: 1.2rem !important;
-        padding: 0.75rem 2rem !important;
-        transition: all 0.1s;
-    }}
-
-    .stButton button:hover {{
-        transform: translate(-2px, -2px);
-        box-shadow: 12px 12px 0px #000 !important;
-        background-color: {ACCENT_COLOR_1} !important;
+        background: linear-gradient(135deg, {ACCENT_COLOR_1}AA, {ACCENT_COLOR_3}AA) !important;
         color: #fff !important;
+        border: none !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        padding: 0.75rem 2rem !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    }}
+    
+    .stButton button:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
+        filter: brightness(1.2);
     }}
 
-    .stButton button:active {{
-        transform: translate(6px, 6px);
-        box-shadow: 0px 0px 0px #000 !important;
+    /* Sidebar */
+    section[data-testid="stSidebar"] {{
+        background-color: rgba(0, 0, 0, 0.85) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
     }}
 
-    /* Metrics/Results */
+    /* Metrics */
     div[data-testid="stMetricValue"] {{
-        font-size: 3rem !important;
-        color: {ACCENT_COLOR_1} !important;
-        text-shadow: 3px 3px 0px #000;
-        background: #000;
-        padding: 0.5rem;
-        border: 3px solid #fff;
-        display: inline-block;
+        background: transparent !important;
+        border: none !important;
+        color: {ACCENT_COLOR_2} !important;
+        font-size: 2.5rem !important;
+        text-shadow: 0 0 10px {ACCENT_COLOR_2}66;
     }}
     
     div[data-testid="stMetricLabel"] {{
-        background: #000;
-        color: #fff;
-        padding: 2px 5px;
-        border: 1px solid #fff;
-        display: inline-block;
-        margin-bottom: 5px;
+        background: transparent !important;
+        border: none !important;
+        color: #aaa !important;
     }}
 
-    /* Feature Importance Box */
+    /* Feature Box */
     .feature-box {{
-        background-color: #fff;
-        border: 4px solid #000;
-        padding: 1rem;
-        box-shadow: 8px 8px 0px #000;
-        margin-top: 1rem;
-        color: #000;
+        background: rgba(0, 0, 0, 0.6);
+        color: #eee;
     }}
-    
     .feature-box ul {{
-        list-style-type: square;
+        list-style: none;
+        padding-left: 0;
+    }}
+    .feature-box li {{
+        margin-bottom: 5px;
+        padding-left: 10px;
+        border-left: 3px solid {ACCENT_COLOR_3};
     }}
 
-    /* Progress Bar */
-    .stProgress > div > div > div > div {{
-        background-color: {ACCENT_COLOR_2};
-        border: 2px solid #000;
-    }}
-
-    /* Footer / Credit */
+    /* Footer */
     .footer {{
-        margin-top: 5rem;
-        text-align: center;
-        background: #000;
-        color: #fff;
+        margin-top: 3rem;
         padding: 1rem;
-        border-top: 5px solid {ACCENT_COLOR_1};
-    }}</style>
+        text-align: center;
+        background: rgba(0, 0, 0, 0.8);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #888;
+        font-size: 0.8rem;
+    }}
+
+</style>
+""", unsafe_allow_html=True)</style>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
