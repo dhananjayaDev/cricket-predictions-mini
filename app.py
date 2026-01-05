@@ -199,7 +199,6 @@ st.markdown(f"""
     }}
 
 </style>
-""", unsafe_allow_html=True)</style>
 """, unsafe_allow_html=True)
 
 # ==============================================================================
@@ -489,23 +488,34 @@ elif mode == "LIVE (IN-PLAY)":
         st.markdown(f"### {batting_team} WIN PROBABILITY")
         
         # Gauge Visual
+        # Gauge Visual
+        gauge_val = f"{win_prob:.1f}"
         gauge_html = f"""
-        <div style="background-color:#333; height:30px; border:2px solid #000; position:relative;">
-            <div style="background-color:{ACCENT_COLOR_1}; width:{win_prob}%; height:100%;"></div>
-            <div style="position:absolute; top:0; left:50%; transform:translateX(-50%); color:#fff; font-weight:bold; line-height:30px;">
-                {win_prob:.1f}%
+        <div style="background-color:rgba(255,255,255,0.1); height:30px; border-radius:15px; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.2);">
+            <div style="background-color:{ACCENT_COLOR_1}; width:{gauge_val}%; height:100%;"></div>
+            <div style="position:absolute; top:0; left:50%; transform:translateX(-50%); color:#fff; font-weight:bold; line-height:30px; text-shadow:0 1px 2px #000;">
+                {gauge_val}%
             </div>
         </div>
         """
         st.markdown(gauge_html, unsafe_allow_html=True)
         
+        # Key Factors Visuals
+        run_rate = current_score / overs_bowled if overs_bowled > 0 else 0
+        wickets_left = 10 - wickets_lost
+        overs_left = 50 - overs_bowled
+        
+        # Pre-format to avoid syntax errors in multiline f-strings
+        rr_str = f"{run_rate:.2f}"
+        ol_str = f"{overs_left:.1f}"
+        
         st.markdown("#### KEY FACTORS")
         st.markdown(f"""
         <div class="feature-box">
             <ul>
-                <li><strong>Run Rate:</strong> {current_score/overs_bowled if overs_bowled else 0:.2f}</li>
-                <li><strong>Wickets in Hand:</strong> {10 - wickets_lost}</li>
-                <li><strong>Overs Remaining:</strong> {50 - overs_bowled:.1f}</li>
+                <li><strong>Run Rate:</strong> {rr_str}</li>
+                <li><strong>Wickets in Hand:</strong> {wickets_left}</li>
+                <li><strong>Overs Remaining:</strong> {ol_str}</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
